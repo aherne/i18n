@@ -1,6 +1,17 @@
 # Internationalization & Localization API
 
-*Documentation below refers to latest API version, available in branch [v3.0.0](https://github.com/aherne/php-internationalization-api/tree/v3.0.0)! For older version in master branch, please check [Lucinda Framework](https://www.lucinda-framework.com/internationalization).*
+Table of contents:
+
+- [About](#about)
+    - [How Are Locales Detected](#how-are-locales-detected)
+    - [How Are Locales Detected](#how-are-translations-stored)
+- [Configuration](#configuration)
+- [Execution](#execution)
+- [Installation](#installation)
+- [Unit Tests](#unit-tests)
+- [Reference Guide](#reference-guide)
+
+## About 
 
 This API is a very light weight platform that allows presentation logic (views) to be automatically translated based on user locale (see [how are locales detected](#how-are-locales-detected)). In order to achieve this, it expects textual parts of your views to be broken up into fine-grained units (ideally without HTML), each identified by a unique keyword and stored in a topic + locale specific dictionary file (see [how are translations stored](#how-are-translations-stored)). This way your HTML view becomes a web of units expected to be translated on compilation, as in example below:
 
@@ -12,6 +23,8 @@ This API is a very light weight platform that allows presentation logic (views) 
 	</body>
 </html>
 ```
+
+![diagram](https://www.lucinda-framework.com/public/images/svg/internationalization-api.svg)
 
 Since the logic of view rendering/compilation is a MVC API's concern, instead of performing keyword replacement with translations based on detected locale in response to be rendered, API provides developers a platform able to automatically detect user locale as well as setting/getting translations based on following steps:
 
@@ -26,7 +39,7 @@ API is fully PSR-4 compliant, only requiring PHP7.1+ interpreter and SimpleXML e
 - **[unit tests](#unit-tests)**: API has 100% Unit Test coverage, using [UnitTest API](https://github.com/aherne/unit-testing) instead of PHPUnit for greater flexibility
 - **[example](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/tests/WrapperTest.php)**: shows a deep example of API functionality based on unit test for [Lucinda\Internationalization\Wrapper](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Wrapper.php)
 
-## How are locales detected
+### How are locales detected
 
 A locale is understood by this API as a combination of a double digit lowercase ISO language code and a double digit uppercase ISO country code (eg: *en_US*) joined by underscore. API is able to detect user locale based on following mechanisms:
 
@@ -36,7 +49,7 @@ A locale is understood by this API as a combination of a double digit lowercase 
 
 If locale could not be detected, the default (specific to your application) will be used instead. 
 
-## How are translations stored
+### How are translations stored
 
 Translations are expected by API to be stored in JSON files. Each JSON file is found on disk at **folder/locale/domain.extension** path where:
 
@@ -74,7 +87,7 @@ Where:
 - *domain*: (optional) name of translation file (see [how are translations stored](#how-are-translations-stored)). If not set, "messages" is assumed!
 - *extension*: (optional) translation file extension (see [how are translations stored](#how-are-translations-stored)). If not set, "json" is assumed!
 
-## Initialization
+## Execution
 
 Now that XML is configured, you can initialize API using [Lucinda\Internationalization\Wrapper](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Wrapper.php):
 
@@ -90,27 +103,10 @@ This class reads XML and user request, compiles internationalization settings an
 | getReader | void | [Lucinda\Internationalization\Reader](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Reader.php) | Gets instance to use in getting translations |
 | getWriter | void | [Lucinda\Internationalization\Writer](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Writer.php) | Gets instance to use in setting translations |
 
+Once instance is made, unit translations can be operated using following methods:
 
-## Getting Translations
-
-Unit translation can be retrieved from [storage](#how-are-translations-stored) based on [detected locale](#how-are-locales-detected) using [Lucinda\Internationalization\Reader](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Reader.php), which defines following public methods:
-
-| Method | Arguments | Returns | Description |
-| --- | --- | --- | --- |
-| __construct | [Lucinda\Internationalization\Settings](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Settings.php) | void | Injects detected user locale |
-| getTranslation | string $key, string $domain=null | string | Gets value of translation based on locale. If none found, value of $key is returned! |
-
-## Setting Translations
-
-Unit translation can be added to / deleted from [storage](#how-are-translations-stored) based on [detected locale](#how-are-locales-detected) using [Lucinda\Internationalization\Writer](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Writer.php), which defines following public methods:
-
-| Method | Arguments | Returns | Description |
-| --- | --- | --- | --- |
-| __construct | [Lucinda\Internationalization\Settings](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Settings.php) | void | Injects detected user locale |
-| setTranslation | string $key, string $value | void | Sets a unit translation for detected locale based on its keyword and value. |
-| unsetTranslation | string $key| void | Deletes a unit translation for detected locale based on its keyword |
-| save | void | void | Persists changes to JSON translation file. |
-
+- **getReader**: gets a [Lucinda\Internationalization\Reader](#class-reader) object able to retrieve translations from [storage](#how-are-translations-stored) based on [detected locale](#how-are-locales-detected)
+- **getWriter**: gets a [Lucinda\Internationalization\Writer](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Writer.php) object able to save/delete translations from [storage](#how-are-translations-stored) based on [detected locale](#how-are-locales-detected) using 
 
 ## Installation
 
@@ -154,3 +150,23 @@ For tests and examples, check following files/folders in API sources:
 - [test.php](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/test.php): runs unit tests in console
 - [unit-tests.xml](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/unit-tests.xml): sets up unit tests
 - [tests](https://github.com/aherne/php-internationalization-api/tree/v3.0.0/tests): unit tests for classes from [src](https://github.com/aherne/php-internationalization-api/tree/v3.0.0/src) folder
+
+## Reference Guide
+
+### Class Reader
+
+[Lucinda\Internationalization\Reader](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Reader.php) encapsulates retrieving unit translations from [storage](#how-are-translations-stored) and defines following relevant public methods:
+
+| Method | Arguments | Returns | Description |
+| --- | --- | --- | --- |
+| getTranslation | string $key, string $domain=null | string | Gets value of translation based on locale. If none found, value of $key is returned! |
+
+### Class Writer
+
+[Lucinda\Internationalization\Writer](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Writer.php) encapsulates adding/updating/deleting unit translations from [storage](#how-are-translations-stored) and defines following relevant public methods:
+
+| Method | Arguments | Returns | Description |
+| --- | --- | --- | --- |
+| setTranslation | string $key, string $value | void | Sets a unit translation for detected locale based on its keyword and value. |
+| unsetTranslation | string $key| void | Deletes a unit translation for detected locale based on its keyword |
+| save | void | void | Persists changes to JSON translation file. |
