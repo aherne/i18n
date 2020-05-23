@@ -4,7 +4,7 @@ Table of contents:
 
 - [About](#about)
     - [How Are Locales Detected](#how-are-locales-detected)
-    - [How Are Locales Detected](#how-are-translations-stored)
+    - [How Are Translations Stored](#how-are-translations-stored)
 - [Configuration](#configuration)
 - [Execution](#execution)
 - [Installation](#installation)
@@ -29,9 +29,7 @@ This API is a very light weight platform that allows presentation logic (views) 
 Since the logic of view rendering/compilation is a MVC API's concern, instead of performing keyword replacement with translations based on detected locale in response to be rendered, API provides developers a platform able to automatically detect user locale as well as setting/getting translations based on following steps:
 
 - **[configuration](#configuration)**: setting up an XML file where API is configured for locale detection and translations storage
-- **[initialization](#initialization)**: creating a [Lucinda\Internationalization\Wrapper](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Wrapper.php) instance based on above XML
-- **[getting translations](#getting-translations)**: using [Lucinda\Internationalization\Reader](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Reader.php) instance to get translations based on keyword and locale 
-- **[setting translations](#getting-translations)**: using [Lucinda\Internationalization\Writer](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Writer.php) instance to set translations based on keyword and locale 
+- **[execution](#execution)**: creating a [Lucinda\Internationalization\Wrapper](https://github.com/aherne/php-internationalization-api/blob/v3.0.0/src/Wrapper.php) instance based on above, to use in getting/setting translations by keyword
 
 API is fully PSR-4 compliant, only requiring PHP7.1+ interpreter and SimpleXML extension. To quickly see how it works, check:
 
